@@ -6,8 +6,9 @@ import { ResponsiveCSSClass } from '../../responsive-visibility';
 import { PdfShyButtonService } from './pdf-shy-button-service';
 
 @Component({
-  selector: 'pdf-shy-button',
-  templateUrl: './pdf-shy-button.component.html',
+    selector: 'pdf-shy-button',
+    templateUrl: './pdf-shy-button.component.html',
+    standalone: false
 })
 export class PdfShyButtonComponent implements OnInit, OnChanges, AfterViewInit {
   @Input()

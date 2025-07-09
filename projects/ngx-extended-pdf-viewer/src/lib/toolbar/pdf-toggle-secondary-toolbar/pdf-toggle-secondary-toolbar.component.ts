@@ -3,9 +3,10 @@ import { ResponsiveVisibility } from '../../responsive-visibility';
 import { NgxExtendedPdfViewerService } from '../../ngx-extended-pdf-viewer.service';
 
 @Component({
-  selector: 'pdf-toggle-secondary-toolbar',
-  templateUrl: './pdf-toggle-secondary-toolbar.component.html',
-  styleUrls: ['./pdf-toggle-secondary-toolbar.component.css'],
+    selector: 'pdf-toggle-secondary-toolbar',
+    templateUrl: './pdf-toggle-secondary-toolbar.component.html',
+    styleUrls: ['./pdf-toggle-secondary-toolbar.component.css'],
+    standalone: false
 })
 export class PdfToggleSecondaryToolbarComponent {
   @Input()
