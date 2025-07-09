@@ -1,4 +1,49 @@
+if (AbortSignal && !AbortSignal.any) {
+  AbortSignal.any = function(signals) {
+    // Ensure the input is iterable
+    if (typeof signals[Symbol.iterator] !== 'function') {
+      throw new TypeError('AbortSignal.any() requires an iterable input');
+    }
 
+    // Create a new AbortController to manage the combined signal
+    const controller = new AbortController();
+
+    // Convert the iterable to an array and check for invalid inputs
+    const signalArray = Array.from(signals, (signal) => {
+      if (!(signal instanceof AbortSignal)) {
+        throw new TypeError('Each element of the iterable must be an AbortSignal');
+     }
+     return signal;
+    });
+
+    // If any signal is already aborted, abort immediately
+    if (signalArray.some(signal => signal.aborted)) {
+      controller.abort();
+      return controller.signal;
+    }
+
+    // Set up listeners for each signal
+    const abortHandler = () => {
+      controller.abort();
+      cleanup();
+    };
+ 
+    const cleanup = () => {
+      signalArray.forEach(signal => {
+        signal.removeEventListener('abort', abortHandler);
+      });
+    };
+
+    signalArray.forEach(signal => {
+      signal.addEventListener('abort', abortHandler);
+    });
+
+    // Ensure cleanup happens when the combined signal is aborted
+    controller.signal.addEventListener('abort', cleanup);
+
+    return controller.signal;
+  };
+}
 (() => {
 /**
  * @licstart The following is the entire license notice for the

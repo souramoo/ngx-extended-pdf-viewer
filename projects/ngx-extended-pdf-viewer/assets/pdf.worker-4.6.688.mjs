@@ -48,7 +48,17 @@ var __webpack_exports__ = globalThis.pdfjsWorker = {};
 __webpack_require__.d(__webpack_exports__, {
   WorkerMessageHandler: () => (/* reexport */ WorkerMessageHandler)
 });
-
+if (Promise && typeof Promise.withResolvers === 'undefined') {
+  // @ts-expect-error This does not exist outside of polyfill which this is doing
+  Promise.withResolvers = function () {
+    let resolve, reject;
+    const promise = new Promise((res, rej) => {
+      resolve = res;
+      reject = rej;
+    });
+    return { promise, resolve, reject };
+  };
+}
 ;// CONCATENATED MODULE: ./external/ngx-logger/ngx-console.js
 class NgxConsole {
   static ngxConsoleFilter = (_level, _message) => true;
@@ -1566,9 +1576,9 @@ function numberToString(value) {
     return (roundedValue / 100).toString();
   }
   if (roundedValue % 10 === 0) {
-    return value.toFixed(1);
+    return (value ?? 0).toFixed(1);
   }
-  return value.toFixed(2);
+  return (value ?? 0).toFixed(2);
 }
 function getNewAnnotationsMap(annotationStorage) {
   if (!annotationStorage) {
